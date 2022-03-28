@@ -1,0 +1,769 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{relsize}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{hyperref}
+
+
+%opening
+\title{
+  Linear Algebra Cheat Sheet
+  \linebreak
+  \linebreak
+  \smaller[4]{a.k.a things you need to learn by heart \& by Tuesday unless you have a strange addiction of disappointing Stefan}
+}
+\author{
+shameless (and incomplete) rip-off from lectures and recommended book
+}
+
+\begin{document}
+
+\maketitle
+
+\section{Things Not Covered (Hopefully TBD)}
+
+\begin{enumerate}
+\item Row operations
+\item Regular \& Reduced Row Echelon Forms
+\item Matrix multiplication properties
+\item Cofactor expansion
+\item Solving non-homogeneous SLE 
+\item Finding coefficients for linear combination (= solving non-homogeneous SLE)
+\item Definition of SLE consistency, free variables \& trivial solution
+\item Injectivity (one-to-one) \& Surjectivity (onto)
+\item Marieke's supermemo
+\item Trace of matrix
+\item All of the above is not that hard and hopefully everyone already has a
+notion of that
+\end{enumerate}
+
+\section{Basics}
+
+\subsection{Zero Vector}
+
+A vector in which all components are zeros:
+
+\begin{displaymath}
+\begin{bmatrix}
+0 \\
+0 \\
+0
+\end{bmatrix}
+\end{displaymath}
+
+\subsection{Zero Matrix}
+
+Zero matrix is a matrix with all elements equal to zero.
+
+Multiplication of zero matrix with any vector results in a zero vector.
+
+\begin{displaymath}
+\begin{bmatrix}
+0 & 0 & 0 \\
+0 & 0 & 0 \\
+0 & 0 & 0
+\end{bmatrix}
+\end{displaymath}
+
+\subsection{Identity Matrix}
+
+Identity matrix is a matrix with all elements on diagonal equal to ones and
+all other equal to zeros.
+
+\begin{displaymath}
+\begin{bmatrix}
+1 & 0 & 0 \\
+0 & 1 & 0 \\
+0 & 0 & 1
+\end{bmatrix}
+\end{displaymath}
+
+\subsection{Triangular matrix}
+
+Triangular matrix is a square matrix with elements below and above main diagonal set to zero. The one with non-zero elements above the diagonal is
+called upper or right triangular matrix:
+
+\begin{displaymath}
+\begin{bmatrix}
+a & b & c \\
+0 & d & e \\
+0 & 0 & f
+\end{bmatrix}
+\end{displaymath}
+
+Obviously, placing elements below results in lower/left triangular matrix:
+
+\begin{displaymath}
+\begin{bmatrix}
+a & 0 & 0 \\
+b & c & 0 \\
+d & e & f
+\end{bmatrix}
+\end{displaymath}
+
+\subsection{Diagonal Matrix}
+
+Diagonal matrix is a square matrix with all elements except of main diagonal
+set to zeros:
+
+\begin{displaymath}
+\begin{bmatrix}
+a & 0 & 0 \\
+0 & b & 0 \\
+0 & 0 & c
+\end{bmatrix}
+\end{displaymath}
+
+Identity matrix is obviously a diagonal matrix.
+
+\subsection{Symmetric Matrix}
+
+Symmetric matrix is a matrix with elements mirrored across main diagonal. See
+corresponding section closer to the end.
+
+\subsection{Linear Independence}
+
+The concept is very simple. When some abstract thing $X$ (a vector, usually) is linearly independent from set of things $W Y Z$ it means that $X$ can't be
+expressed as a sum of $W Y Z$ multiplied by some coefficients - or, in other words, $X$ can't be restored with the help of $W Y Z$ only. If $X$ is not
+linearly independent and can be expressed through as 
+$X = c_1 \cdot W + c_2 \cdot Y + c_3 \cdot Z$, 
+then such sum is called a linear combination of $W Y Z$. Other definition of
+a linear independent set is the vector equation of it's components
+$c_1 \cdot \vec{v}_1 + ... + c_n \cdot \vec{v}_n = 0$ has only the trivial
+solution $c_1 = c_2 = ... = c_n = 0$.
+
+To check whether a set of vectors is linearly independent, try to make matrix
+of them and reduce it to identity matrix. Ability to do so tells that set is
+linearly independent and vice versa.
+
+\subsection{Linear Transformation}
+
+Any function $T(X): \mathbb{R}^m \rightarrow \mathbb{R}^n$ that has following
+properties:
+
+\begin{enumerate}
+
+\item $T(A + B) = T(A) + T(B)$
+\item $T(c \cdot A) = c \cdot T(A)$, where $c$ is a scalar.
+
+  \begin{enumerate}
+  \item This in turn means that $T(\vec{0}) = \vec{0}$
+  \end{enumerate}
+
+\end{enumerate}
+
+\textbf{Kernel} of linear transformation is a set of $\vec{x}$ such that 
+$T(\vec{x}) = \vec{0}$. Kernel consists of zero vector iff transformation
+is injective (one-to-one).
+
+Standard matrix of linear transformation $A$ is built / restored by concatenating vectors resulting in applying transformation to columns of
+identity matrix of a proper size:
+
+\begin{displaymath}
+A = [T(e_1) T(e_2) ... T (e_n)] = [
+T(\begin{bmatrix}1 \\ 0 \\ ... \\ 0 \end{bmatrix})
+T(\begin{bmatrix}0 \\ 1 \\ ... \\ 0 \end{bmatrix})
+...
+T(\begin{bmatrix}0 \\ 0 \\ ... \\ 1 \end{bmatrix})
+]
+\end{displaymath}
+
+Given a matrix $A$, following can be said about linear transformation described by that matrix:
+
+\begin{enumerate}
+\item If $A$ has a pivot in every row, then transformation is surjective
+(onto).
+\item If $A$ has a pivot in every column (= columns are linearly independent),
+then transformation is injective.
+\end{enumerate}
+
+\subsection{Span}
+
+A Span of vectors $Span {\vec{v}_1, \vec{v}_2,.. \vec{v}_n}$ is a set of all
+possible linear combinations of specified vectors. Spans are useful for
+describing all possible places that you can reach with provided set of
+vectors - including subspaces of vector spaces.
+
+\subsection{Inner/Dot Product}
+
+Inner product (dot product) of two vectors is a sum of multiplications of
+their elements in the same positions, that is:
+
+\begin{displaymath}
+\vec{v} \cdot \vec{u} 
+= \sum_{i=1}^n v_i \times u_i \\
+= (v_1 \times u_1) + (v_2 \times u_2) + ... + (v_n \times u_n)
+\end{displaymath}
+
+Which makes it the very same as
+
+\begin{displaymath}
+\vec{v} \cdot \vec{u} = [\vec{v}^T] \vec{u}
+\end{displaymath}
+
+Inner product is defined only for vectors of the same size.
+
+Inner product of vector with itself is a square of length, thus
+
+\begin{displaymath}
+||\vec{v}|| = \sqrt{\vec{v} \cdot \vec{v}}
+\end{displaymath}
+
+Inner product of orthogonal vectors is zero (which is a nice way to verify
+orthogonality of vectors).
+
+Properties:
+
+\begin{enumerate}
+\item $\vec{u} \cdot \vec{v} = \vec{v} \cdot \vec{u}$ (commutativity)
+\item $(\vec{u} + \vec{v}) \cdot \vec{w} = \vec{v} \cdot \vec{w} + \vec{u} \cdot \vec{w}$ (distributivity)
+\item $c (\vec{u} \cdot \vec{v}) = (c\vec{u}) \cdot \vec{v} = \vec{u} \cdot (c\vec{v})$ (this is not associativity per se!)
+\item $\vec{u} \cdot \vec{u} \geq 0$
+\item Not a property, but: distance between two vectors can be found as 
+
+\begin{displaymath}
+dist(\vec{u}, \vec{v}) = ||\vec{u} - \vec{v}|| = \sqrt{(\vec{u} - \vec{v}) \cdot (\vec{u} - \vec{v})}
+\end{displaymath}
+\end{enumerate}
+
+\section{Invertible Matrices}
+
+Generally, all of the following properties are pretty much the same viewed from different angles. If A is an invertible $n \times n$ matrix, then:
+
+\begin{enumerate}
+
+\item Columns of A are linearly independent
+\item There is a pivot in every column and row
+\item It is reducible to identity matrix
+\item There exists matrix $A^{-1}$ such that $A \cdot A^{-1} = A^{-1} \cdot A = I_n$. $A$ and $A^{-1}$ are inverse of each other.
+\item $A^{-1}$ is unique (that is, there is only one such matrix).
+\item $(A^T)^{-1} = (A^{-1})^T$
+\item $det(A) \neq 0$
+\item $Col(A) = \mathbb{R}^n$
+\item $rank(A) = n$
+\item $nullity(A) = 0$
+\item $Nul(A) = \{\vec{0}\}$
+\item If matrix is used for SLE in format of $A \vec{x} = \vec{b}$, then 
+for any $\vec{b}$ there exists only one unique solution.
+
+\end{enumerate}
+
+Don't be confused by the \emph{invertible} word - we're speaking about a whole
+bunch of properties, and in terms of exam we would be more interested in
+linear independence of column vectors rather than finding the inverse.
+
+Finding inverse matrix (if such exists) is relatively easy. To do so, create
+a bigger matrix by concatenating source matrix A together with identity matrix
+of same size:
+
+\begin{displaymath}
+\begin{bmatrix}
+1 & 2 & 3 & 1 & 0 & 0 \\
+1 & 3 & 3 & 0 & 1 & 0 \\
+1 & 3 & 4 & 0 & 0 & 1
+\end{bmatrix}
+\end{displaymath}
+
+And then apply row operations until the left side is reduced to identity matrix
+
+
+\begin{displaymath}
+\begin{bmatrix}
+1 & 0 & 0 & 3 & 1 & -3 \\
+0 & 1 & 0 & -1 & 1 & 0 \\
+0 & 0 & 1 & 0 & -1 & 1
+\end{bmatrix}
+\end{displaymath}
+
+The right side contains now inverse matrix of source matrix $A$.
+
+Non-invertible matrix may also be called \textbf{singular}.
+
+
+\section{Determinants}
+
+Determinants are defined for square matrices only. Even though you could apply cofactor expansion in a weird way, the result is somewhat that is not a determinant.
+
+Some properties:
+
+\begin{enumerate}
+
+\item $det(A \cdot B) = det(A) \cdot det(B)$
+\item $det(A) = \frac{1}{det(A^{-1})}$
+\item $det(A) = det(A^T)$
+\item $det(A) \neq 0 \iff A$ is invertible
+\item $det(A) = a_{11} \cdot a_{22} \cdot ... \cdot a_{nn}$ for triangular matrices
+\item $det(c A) = c^m det(A)$ (see row operations below).
+
+\end{enumerate}
+
+Determinant of a matrix produced by row manipulations relates to the
+determinant of original matrix:
+
+\begin{enumerate}
+
+\item Swapping rows changes the sign of determinant: $det(B) = -det(A)$
+\item If a single row is multiplied by constant $k$, then the resulting determinant is also $k$ times bigger than the determinant of source matrix:
+$det(B) = k \cdot det(A)$
+\item Adding multiple of one row to another one doesn't change anything.
+
+This is why you should avoid as much possible first two operations if you
+plan on getting determinant of original matrix (see below).
+
+\end{enumerate}
+
+\subsection{Cofactor Expansion}
+
+TBD
+
+\subsection{Triangular And Diagonal Matrices}
+
+Since cofactor expansion includes multiplication by the content of the cell,
+all zero cells and their associated minors would not participate in
+determinant calculation. This results in a fact that for triangular and
+diagonal matrices determinant is simply a product of values on the diagonal.
+
+This has one important consequence: to calculate determinant, one may want to
+bring the matrix to triangular form (reduce) first. Just don't forget about row multiplication: since it has effect on determinant, it's too easy to
+mistake while using row multiplication, thus it's better to avoid it at all.
+
+\section{Vector Spaces}
+
+Vector space is a collection (set) of vectors that in together satisfy some
+specific properties listed below. Since it is enough for 
+\emph{any bizarre shit} to satisfy those properties, the definition is very
+vague, but for the exam we are interested in vectors as one-element-wide
+matrices filled with real or complex numbers ($\mathbb{R}^n$, $\mathbb{C}^n$) and polynomials. In general, vector is a collection of values that describe different dimensions, and it's not possible to represent one dimension via
+another - you can't represent $x$ through $y$ in two-dimensional space or
+represent $x^2$ through a scalar multiple of $x$.
+
+Important properties of a vector space $\mathbb{V}$ (vectors $\vec{u}$,
+$\vec{v}$ and $\vec{w}$ are implied to be contained in $\mathbb{V}$).
+
+\begin{enumerate}
+
+\item $\vec{u} + \vec{v} \in \mathbb{V}$ (closed under addition)
+\item $\forall c \in \mathbb{R} [c \cdot \vec{u} \in \mathbb{V}]$ (closed
+under multiplication)
+\item $\vec{u} + \vec{v} = \vec{v} + \vec{u}$ (commutativity)
+\item $(\vec{u} + \vec{v}) + \vec{w} = \vec{v} + (\vec{u} + \vec{w})$ (associativity)
+\item There exists a zero vector $\vec{0} \in V$ such that 
+  \begin{enumerate}
+  \item $\vec{v} + \vec{0} = \vec{v}$
+  \item$\vec{v} - \vec{v} = \vec{0}$
+  \end{enumerate}
+
+\end{enumerate}
+
+Less important properties of a vector space:
+
+\begin{enumerate}
+\item $\forall \vec{v} \in \mathbb{V} [1 \cdot \vec{v} = \vec{v}]$
+\item $\forall c \in \mathbb{R} [c \cdot (\vec{v} + \vec{u}) = c \cdot \vec{v} + c \cdot \vec{u}]$
+\item $\forall c, d \in \mathbb{R} [(c + d) \cdot \vec{v}= c \cdot \vec{v} + d \cdot \vec{v}]$
+\item $\forall c, d \in \mathbb{R} [c \cdot (d \cdot \vec{v}) = (c \cdot d) \cdot \vec{v}]$
+
+\end{enumerate}
+
+\subsection{Subspaces}
+
+Subspaces are much simpler in count of properties. Subset $\mathbb{H}$ of a 
+vector space $\mathbb{V}$ is called a subspace of $\mathbb{V}$ if it satisfies
+following properties:
+
+\begin{enumerate}
+
+\item $\forall \vec{v}, \vec{u} \in \mathbb{H} [\vec{v} + \vec{u} \in \mathbb{H}]$ (closed under addition)
+\item $\forall \vec{v} \in \mathbb{H}, c \in \mathbb{R} [c \cdot \vec{v} \in \mathbb{H}]$ (closed under multiplication)
+\item One of (they are interchangeable):
+  \begin{enumerate}
+  \item $\vec{0} \in \mathbb{H}$
+  \item $|\mathbb{H}| \neq 0$ ($\mathbb{H}$ is not empty, and by (2) zero vector is in it for $c = 0$).
+  \end{enumerate}
+
+\end{enumerate}
+
+Subspace carries properties of vector space. Interesting note: $\{\vec{0}\}$
+is a proper vector space and subspace of a larger vector space.
+
+Because of the zero vector property, every subspace has to go through origin.
+If something doesn't come through origin (i.e. contain zero vector), it is not
+a subspace.
+
+\subsection{Spanning A Space (Describing Subspace)}
+
+If $\vec{v}_1,.. \vec{v}_n$ are in vector space $\mathbb{V}$, then
+$Span\{\vec{v}_1,.. \vec{v}_n\}$ is a subspace of $\mathbb{V}$. Defined span
+is then called subspace spanned by provided vectors.
+
+\subsection{Spaces Of Matrix}
+
+Null space, denoted $Nul(A)$, is a vector space of all vectors describing a
+solution for equation $A \vec{x} = \vec{0}$. Number of dimensions of $Nul(A)$
+is number of free variables in SLE described by matrix.
+
+Column space, denoted $Col(A)$, is a vector space generated by column vectors
+of a matrix $A$.  $Col(A)$ of $m \times n$ matrix is a subspace of 
+$\mathbb{R}^m$.
+
+Row space, denoted $Row(A)$, is a vector space generated by row vectors of 
+matrix $A$. Row space is orthogonal to null space (because multiplication of any row with any vector from null space will result in zero vector). $Row(A)$
+of $m \times n$ matrix is a subspace of $\mathbb{R}^n$.
+
+\begin{displaymath}
+Row(A) = Col(A^T)
+\end{displaymath}
+\begin{displaymath}
+A \sim B \implies Row(A) = Row(B)
+\end{displaymath}
+
+\section{Basis}
+
+Basis for a vector space is a set of linearly independent vectors that spans
+such space. Matrix for basis for vector space (not subspace), by definition,
+is invertible.
+
+Basis for $Col(A)$ is the set of linear independent vectors in $A$, which can
+be obtained by taking columns with pivots from original (non-reduced) $A$.
+
+Basis for $Row(A)$ can be taken as rows with pivots from reduced form
+directly.
+
+Number of vectors [that are not zero vector] in basis defines number of dimensions in subspace it spans (i.e. $\# vectors = \# dimensions$). Zero
+vector may be used only in basis of $\{\vec{0}\}$, which has zero dimensions
+(space it spans is just a single point - origin).
+
+To prove that set of vectors is a basis for a vector space it is enough to prove its linear independence (which in turn can be done by arranging basis
+vectors into a matrix and reducing it to triangular matrix, because it can
+be further reduced to identity matrix).
+
+\subsection{Standard basis}
+
+A basis for which all vectors contain all zeros and a single one, e.g.
+
+\begin{displaymath}
+\{
+\begin{bmatrix}
+0 \\
+0 \\
+1
+\end{bmatrix},
+\begin{bmatrix}
+1 \\
+0 \\
+0
+\end{bmatrix},
+\begin{bmatrix}
+0 \\
+1 \\
+0
+\end{bmatrix}
+\}
+\end{displaymath}
+
+Those by definition are also unit vectors (but not all linearly independent
+unit vectors would make a standard basis).
+
+\section{Change Of Basis}
+
+Given basis $B_{old} = \{\vec{v}_1, \vec{v}_2,.. \vec{v}_n\}$, basis 
+$B_{new} = \{\vec{u}_1, \vec{u}_2,.. \vec{u}_n\}$, and a conversion 
+$\vec{u}_j = \sum_{i=1}^n a_{i,j} \vec{v}_i$, coordinates in new basis
+can be found by multiplying coordinates from old basis by matrix where
+each column $j$ consists of elements $a_{1,j} ... a_{n,j}$. It is expected
+that if such task would be given in exam, the routine of finding coefficients
+would be lying on shoulders of examinee (and for that it should be enough to
+solve system of SLE $[\vec{v}_1 \vec{v}_2 ... \vec{v}_n] \vec{x} = \vec{u}$).
+
+(Please someone verify the statements above. It is a complex topic and i may
+be mistaken a bit.)
+
+\section{Dimensions}
+
+The \textbf{rank} of a matrix is the number of dimensions of it's column
+space. Since the column space is defined by pivot columns, the rank is simply
+the number of pivot columns.
+
+The \textbf{nullity} of a matrix is the number of dimensions of it's null
+space. It's the number of free variables in the matrix.
+
+Rank and nullity together equal to the number of columns in A (which makes perfect sense if you think about relation between pivot columns and free variables).
+
+\section{Eigenalities}
+
+\textbf{Eigenvector} of matrix $A$ is a vector $\vec{x}$ such that
+$A \cdot \vec{x} = \lambda \vec{x}$, where $\lambda$ is a scalar value.
+
+Such scalar value is called an \textbf{eigenvalue}. Each eigenvalue
+corresponds to a family of eigenvectors, which define \textbf{eigenspace}.
+
+Eigenvectors and eigenvalues are only defined for square ($n \times n$)
+matrices.
+
+Eigenvalues are defined when equation $A \cdot \vec{x} = \lambda \vec{x}$
+has non-trivial solutions for $\vec{x}$. It can be transformed in following
+way:
+
+\begin{displaymath}
+A \cdot \vec{x} = \lambda \vec{x}
+\end{displaymath}
+\begin{displaymath}
+A \cdot \vec{x} - \lambda \vec{x} = 0
+\end{displaymath}
+\begin{displaymath}
+(A - \lambda In) \vec{x} = 0
+\end{displaymath}
+
+Which turns into "eigenvalues are such values that $det(A - \lambda In)$ is
+equal to zero". Calculating the derivative with lambda as variable provides
+\emph{characteristic polynomial} - a polynomial which roots are eigenvalues.
+
+Eigenvalues may have multiplicity - number of times they appear in
+characteristic polynomial.
+
+Some properties:
+
+\begin{enumerate}
+\item $det(A) = \lambda_1 \cdot \lambda_2 \cdot ... \cdot \lambda_n$
+\item $trace(A) = \sum_{i=1}^n \lambda_i$
+\item 0 can be an eigenvalue only of a non-invertible matrix
+\item Eigenvectors from different eigenspaces are linearly independent
+\end{enumerate}
+
+Determinant and trace properties are very useful for finding last eigenvalue
+when others are already known.
+
+It is possible for eigenvalue to be a complex number, so if characteristic
+polynomial contains something in form of $(\lambda + c)^{2n}$, it doesn't mean
+that eigenvalue for such factor doesn't exist.
+
+By the way, "eigen" is "own" (adjective, "my own value") in Dutch. Do you see
+how everything lands in a very proper composition in a similarly neat way?
+\emph{I bet they've planned it all along years before we've enrolled.}
+
+\section{Similarity}
+
+Square matrices $A$ and $B$ are called similar if there exists a matrix $P$
+such that $A = P \cdot B \cdot P^{-1}$ (and, vice versa, 
+$B = P^{-1} \cdot A \cdot P$.).
+
+Similar matrices have the very same characteristic polynomial (and, by
+thus, eigenvalues; however, two matrices having same eigenvalues don't tell
+anything about similarity though).
+
+\subsection{Diagonalization}
+
+Diagonalization is a process of finding similar diagonal matrix $D$ and
+corresponding transformation matrix $P$ for original matrix $A$. Matrix $A$ 
+is then called \emph{diagonalizable}.
+
+$n \times n$ diagonalizable matrix $A$ requires columns of $P$ to be $n$
+linearly independent eigenvectors of $A$ (and, in turn, if every eigenspace
+has number dimensions equal to the multiplicity of each eigenvalue). $D$ then
+has eigenvalues on it's diagonal, and each eigenvector (column) in $P$
+corresponds to the eigenvalue in the very same column in $D$.
+
+Diagonalizing a matrix in exam means finding the matrices $P$ and $D$ for that
+matrix. To do so, one needs to find eigenvalues of matrix, prove that sum of
+the dimensions of eigenspaces is equal to $n$ (otherwise there's not enough
+eigenvectors to build $P$), find the eigenvectors, then finally build $P$ from eigenvectors and $D$ from eigenvalues, listed in the same order as their corresponding eigenvectors.
+
+$n \times n$ matrix with $n$ distinct eigenvalues is automatically
+diagonalizable.
+
+Diagonalization is useful for problem of computing exponent of specific matrix
+$A$ (i.e. $A^n$). Instead of multiplying $A$ $n$ times, it can be first
+converted into $P \cdot D \cdot P^{-1}$, then the exponent would be computed
+as $P \cdot D^n \cdot P^{-1}$, and exponent of any diagonal matrix $D$ is
+just another diagonal matrix in which specified exponent is applied to
+elements of $D$:
+
+\begin{displaymath}
+P \cdot \begin{bmatrix}
+a & 0 & 0 \\
+0 & b & 0 \\
+0 & 0 & c
+\end{bmatrix}^n \cdot P^{-1}
+=
+P \cdot \begin{bmatrix}
+a^n & 0   & 0   \\
+0   & b^n & 0   \\
+0   & 0   & c^n
+\end{bmatrix} \cdot P^{-1}
+\end{displaymath}
+
+\section{Orthogonality}
+
+Two vectors are orthogonal if their inner product is zero or if (classic
+geometry) $||\vec{u} + \vec{v}||^2 = ||\vec{u}||^2 + ||\vec{v}||^2$.
+Geometrically orthogonal vectors are at right angle with each other. Zero
+vector is orthogonal to any other vector.
+
+\subsection{Orthogonal Complements}
+
+If a vector $\vec{z}$ is orthogonal to every vector in subspace $\mathbb{W}$
+of $\mathbb{R}^n$, then $\vec{z}$ is said to be orthogonal to $\mathbb{W}$.
+Set of vectors orthogonal to $\mathbb{W}$ is called an orthogonal complement
+to $\mathbb{W}$ and is denoted as $\mathbb{W}^{\perp}$. Orthogonal complement
+of an orthogonal complement to subspace is a subspace itself:
+
+\begin{displaymath}
+(\mathbb{W}^{\perp})^{\perp} = \mathbb{W}
+\end{displaymath}
+
+Properties:
+
+\begin{enumerate}
+\item $\mathbb{W}^{\perp}$ is a subspace of $\mathbb{R}^n$.
+\end{enumerate}
+
+\subsection{Orthogonality \& Matrix Spaces}
+
+Since each matrix row multiplied by a vector from null space will result in
+zero (basically a dot product of matrix row and vector from null space),
+null space is an orthogonal complement of row space and vice versa.
+
+\begin{displaymath}
+Row(A)^{\perp} = Nul(A)
+\end{displaymath}
+
+With matrix transposition this property migrates onto column space:
+
+\begin{displaymath}
+Row(A)^{\perp} = Col(A^T)^{\perp} = Nul(A)
+\end{displaymath}
+\begin{displaymath}
+Col(A)^{\perp} = Nul(A^T)
+\end{displaymath}
+
+\subsection{Orthogonal \& Orthonormal Sets}
+
+An orthogonal set is a set of vectors which are in orthogonal relationship
+with each other (i.e. their dot product is zero). As long as zero vector is
+not in such set, the latter is linearly independent and is a basis for subspace spanned by it.
+
+Coefficients of linear combination for vector $\vec{v}$ of vectors in
+orthogonal set are found quite easily:
+
+\begin{displaymath}
+\vec{v} = c_1 \vec{u}_1 + ... + c_p \vec{u}_p
+\end{displaymath}
+\begin{displaymath}
+c_j = \frac{\vec{v} \cdot \vec{u}_j}{\vec{u}_j \cdot \vec{u}_j}
+\end{displaymath}
+
+Orthonormal set is a an orthogonal set of unit vectors (vectors with length of
+1). If subspace $\mathbb{W}$ is spanned by such set, it is called an
+orthonormal basis for $\mathbb{W}$.
+
+Properties of an matrix $U$ with orthonormal columns ($m \times n$, \textbf{not necessarily square matrix}):
+
+\begin{enumerate}
+\item $A^T A = I_n$
+\item $||U \vec{x}|| = ||\vec{x}||$: linear mapping preserves length
+\item $(U \vec{x}) \cdot (U \vec{y}) = \vec{x} \cdot \vec{y}$: linear mapping
+preserves orthogonality
+\item $(U \vec{x}) \cdot (U \vec{y}) = 0 \iff \vec{x} \cdot \vec{y} = 0$
+\end{enumerate}
+
+Orthogonal matrix is a \textbf{square} invertible matrix $n \times n$ such
+that $U^{-1} = U^T$ (which also has orthonormal columns \& rows).
+
+\subsection{Orthogonal Projection Onto Vector}
+
+Orthogonal projection of vector $\vec{x}$ onto another vector $\vec{u}$ is
+defined by formula
+
+\begin{displaymath}
+\vec{x}_u = \frac{\vec{x} \cdot \vec{u}}{\vec{u} \cdot \vec{u}}
+\end{displaymath}
+
+Projection is a component of original vector that can be expressed as a
+multiple of u "as closely" as possible (i.e. the distance between the two is
+minimal). The difference between original vector and projection is a 
+vector orthogonal to projection, which is also called component of $\vec{x}$
+orthogonal to $\vec{u}$.
+
+\subsection{Orthogonal Projection Onto Subspace}
+
+Orthogonal projection of vector onto subspace is a process of finding a vector
+in that subspace closest to original vector. In other words, original vector
+$\vec{y}$ is decomposed into sum of $\hat{\vec{y}} \in W$  (projection) and
+$\vec{z} \in W^{\perp}$. Projection of vector $\vec{y}$ onto subspace $W$ is denoted as $proj_w(\vec{y})$
+
+If $\{\vec{u}_1, \vec{u}_2,.. \vec{u}_n\}$ is an orthogonal basis for $W$,
+then $\hat{\vec{y}}$ can be defined in following way:
+
+\begin{displaymath}
+proj_w{\vec{y}} = \hat{\vec{y}} = 
+\frac{\vec{y} \cdot \vec{u}_1}{\vec{u}_1 \cdot \vec{u}_1} \vec{u}_1
++ \frac{\vec{y} \cdot \vec{u}_2}{\vec{u}_2 \cdot \vec{u}_2} \vec{u}_2 
++ ...
++ \frac{\vec{y} \cdot \vec{u}_n}{\vec{u}_n \cdot \vec{u}_n} \vec{u}_n 
+\end{displaymath}
+
+If orthogonal basis is also orthonormal, then it is simplified (since dot
+product of each basis vector with itself is 1):
+
+\begin{displaymath}
+proj_w{\vec{y}} = \hat{\vec{y}} = 
+(\vec{y} \cdot \vec{u}_1) \vec{u}_1
++ (\vec{y} \cdot \vec{u}_2) \vec{u}_2
++ ...
++ (\vec{y} \cdot \vec{u}_n) \vec{u}_n
+\end{displaymath}
+
+If organized into matrix $U = [\vec{u}_1 \vec{u}_2 ... \vec{u}_n]$, the same can be expressed in following form:
+
+\begin{displaymath}
+proj_w{\vec{y}} = \hat{\vec{y}} = U U^T \vec{y}
+\end{displaymath}
+
+Properties
+
+\begin{enumerate}
+\item If $\vec{y}$ is already in $W$, then $proj_w(\vec{y}) = \vec{y}$
+\item $proj_w(proj_w(\vec{y})) = proj_w(\vec{y})$
+\end{enumerate}
+
+\section{Symmetric Matrices \& Orthogonal Diagonalization}
+
+Symmetric matrix is a square matrix which have mirrored elements on sides of
+main diagonal, for example:
+
+\begin{displaymath}
+\begin{bmatrix}
+1 & 2 & 3 & 4 \\
+2 & 5 & 6 & 7 \\
+3 & 6 & 8 & 9 \\
+4 & 7 & 9 & 0
+\end{bmatrix}
+\end{displaymath}
+
+That's it row and column $i$ are identical, and $A^T = A$.
+
+Orthogonal diagonalization is a process equivalent to standard diagonalization
+with exception of matrix $P$ being an orthonormal one.
+
+Regular process for finding eigenvectors guarantees to produce linearly
+independent, but not orthogonal eigenvectors (as long as they come from same eigenspace, see properties below). If that is the case, orthogonality between
+pair of vectors can be enforced by subtracting from $\vec{v}_2$ its projection
+onto $\vec{v}_1$  (since that would result in $\vec{v}_2$ component orthogonal
+to $\vec{v}_1$). To get a unit vector, simply divide vector by it's length
+(which can be easily obtained from dot product).
+
+Properties:
+
+\begin{enumerate}
+\item If matrix $A$ is symmetric, then two eigenvectors from different eigenspaces are orthogonal
+\item Matrix $A$ is orthogonally diagonalizable iff it is a symmetric matrix
+\item Eigenvectors from different eigenspaces are orthogonal (no guarantees
+about vectors in single eigenspace).
+\end{enumerate}
+
+\section{Whoa, You've Made It Through!}
+
+Here, \underline{\href{https://www.youtube.com/watch?v=JN5BNHRtRI0}{have a celebration dance}}. Or \underline{\href{https://www.youtube.com/watch?v=fUpdfpOPf4Y}{do it again}}, i dunno.
+
+\end{document}
